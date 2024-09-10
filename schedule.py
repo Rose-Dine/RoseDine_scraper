@@ -17,13 +17,12 @@ def scrape_next_day_meal(driver, file):
 def scrape_day_meals(date, driver, file):
     day_url = f"https://rose-hulman.cafebonappetit.com/cafe/cafe/{date.strftime('%Y-%m-%d')}/"
     weekday = date.weekday()
-    meals = ['Breakfast', 'Lunch', 'Dinner']
-    # if weekday < 5:
-    #     meals = ['Breakfast', 'Lunch', 'Dinner']
-    # elif weekday == 5:
-    #     meals = ['Brunch']
-    # else:
-    #     meals = ['Brunch', 'Dinner']
+    if weekday < 5:
+        meals = ['Breakfast', 'Lunch', 'Dinner']
+    elif weekday == 5:
+        meals = ['Brunch']
+    else:
+        meals = ['Brunch', 'Dinner']
 
     for meal in meals:
         file.write(f"Scraping {meal} for {date.strftime('%Y-%m-%d')}\n")

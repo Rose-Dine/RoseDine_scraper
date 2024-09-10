@@ -9,8 +9,7 @@ _ = load_dotenv(find_dotenv())
 client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
 )
-BASE_URL= os.environ.get("BASE_URL")
-
+BASE_URL = os.environ.get("BASE_URL")
 
 def check_item_exists(name):
     params = {
@@ -49,7 +48,8 @@ def read_menu_data(filename):
     return menu_data
 
 def main():
-    filename = "PyScraping\\output.txt"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    filename = os.path.join(script_dir, 'output.txt')
     menu_data = read_menu_data(filename)
     all_nutrition_data = []
 
@@ -73,7 +73,7 @@ def main():
                     response = client.chat.completions.create(
                         model="gpt-3.5-turbo-0125",
                         messages=initial_messages + [item_message],
-                        temperature=2,
+                        temperature=0.4,
                         max_tokens=1024,
                         top_p=0.9,
                         frequency_penalty=0.1,
@@ -105,10 +105,11 @@ def main():
                     "Nutrition": nutrition_info
                 })
 
-    with open('PyScraping\\nutrition_info.json', 'w') as f:
+    nutrition_info_path = os.path.join(script_dir, 'nutrition_info.json')
+    with open(nutrition_info_path, 'w') as f:
         json.dump(all_nutrition_data, f, indent=4)
 
-    print("Nutrition data saved to nutrition_info.json")
+    print(f"Nutrition data saved to {nutrition_info_path}")
 
 if __name__ == "__main__":
     main()
